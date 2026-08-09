@@ -24,7 +24,7 @@ jobs:
       - run: java --version
 
       - name: Compile and Build Jar Skipping Tests
-        run: mvn spotless:apply clean package -DskipTests
+        run: mvn clean package -DskipTests
 
       - name: Run Unit Tests (Surefire)
         run: mvn test
