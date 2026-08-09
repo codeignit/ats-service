@@ -1,0 +1,33 @@
+name: CI workflow for Sanity Check and Testing
+
+on:
+  push:
+    branches:
+      - "feature/*"
+      - "hotfix/*"
+      - "bugfix/*"
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v6
+
+      - name: Setting Up JAVA
+        uses: actions/setup-java@v5
+        with:
+          distribution: zulu
+          java-version: 21
+          cache: maven
+      - run: java --version
+
+      - name: Compile and Build Jar Skipping Tests
+        run: mvn spotless:apply clean package -DskipTests
+
+      - name: Run Unit Tests (Surefire)
+        run: mvn test
+
+      - name: Run IT's (Failsafe)
+        run: mvn verify -DskipTests
